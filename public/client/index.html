@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+  <head>
+    <meta charset="utf-8">
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chợ Thủ</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lexend" />	
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../client/css/style.css" />
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-animate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+  </head>
+  <body ng-controller="myController">
+    <div class="menu">
+      <span style="padding-left: 12px;">Tìm kiếm <input type="text" ng-model="searchText" class="search">
+      </span>
+      <div style="background-color: black; width: 40px; height: 40px; position: absolute; right: 4px; top: 4px; border-radius: 50%;"></div>
+    </div>
+    <div>
+      <h2>Giỏ hàng:</h2>
+      <ul>
+        <li class="animate-repeat" ng-repeat="item in cart | orderBy:'category'">
+          <span>{{ item.qty + ' x ' + item.category + ' = ' + (getCost(item) | currency) }}</span>
+          <button ng-click="removeItem(item);">Xóa khỏi giỏ</button>
+        </li>
+      </ul>
+    </div>
+    <div class="container">
+      <div class="item-buy" ng-repeat="item in inventory | filter:searchText | orderBy:'category' ">
+        <div class="con" style="width: 39%; float: left" ng-click="addItem(item)">
+          <img src="{{item.description}}">
+        </div>
+        <div style="width: 59%; float: right;">
+          <span style="font-weight: 700">{{ item.category }}</span>
+          <br>
+          <span>{{ item.price }} VND/kg</span>
+          <br>
+          <span>Số lượng: </span>
+          <input type="number" style="width: 40px; font-weight: 700;" ng-model="item.qty"> kg <br>
+          <!--         <span>Tổng: {{ item.qty * item.price | currency }}</span><br><br>
+			 -->
+          <button style="font-weight: 700;" ng-click="addItem(item)"> Thêm vào giỏ </button>
+        </div>
+      </div>
+    </div>
+    <div class="total-price">
+      <div>
+        <a href="" style="float:right; color:grey;">xem giỏ hàng&gt;</a>
+      </div>
+      <br>
+      <hr>
+      <footer>
+        <div style="padding-left: 5px;font-weight:700;">Giá mua hộ: {{ getTotal() }} VND </div>
+        <button class="footer-button" ng-click="clearCart();">Đặt Mua</button>
+      </footer>
+    </div>
+    <script src="../client/js/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+  table, td  {
+    border: 1px solid grey;
+    border-collapse: collapse;
+    padding: 5px;
+  }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+</head>
+<body>
+
+  <div ng-app="myApp" ng-controller="customersCtrl"> 
+  	hello
+    <table>
+      <tr ng-repeat="x in products">
+        <td ng-if="$odd" style="background-color:#f1f1f1">
+        {{ products.indexOf(x) + 1}}</td>
+        <td ng-if="$even">
+        {{ products.indexOf(x) + 1}}</td>
+        <td ng-if="$odd" style="background-color:#f1f1f1">
+        {{ x.name }}</td>
+        <td ng-if="$even">
+        {{ x.name }}</td>
+        <td ng-if="$odd" style="background-color:#f1f1f1">
+        {{ x.url }}</td>
+        <td ng-if="$even">
+        {{ x.url }}</td>
+        <td ng-if="$odd" style="background-color:#f1f1f1">
+        {{ x.active }}</td>
+        <td ng-if="$even">
+        {{ x.active }}</td>
+        <td ng-if="$odd" style="background-color:#f1f1f1">
+          <button>Xem</button>
+          <button>Sửa</button>
+          <button>Xóa</button>
+        </td>
+        <td ng-if="$even">
+          <button>Xem</button>
+          <button>Sửa</button>
+          <button>Xóa</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('customersCtrl', function($scope, $http) {
+        $http.get("/san-pham").then(function (response) {
+        	$scope.products = response.data;
+        });
+    });
+  </script>
+
+</body>
+</html>

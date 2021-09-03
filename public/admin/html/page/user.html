@@ -1,0 +1,41 @@
+<div style="padding: 12px;">
+    <h4>Trang quản lý {{table['user'].title}}</h4>
+    <br />
+    <button type="button" class="btn btn-primary rounded-pill" ng-click="mainCtrl.actionTableBtn('add', 'user', {}, 'Thêm mới', 'Người dùng', 'Tạo')">
+        <i class="fa fa-plus" style="font-size: 16px;"></i>
+        Thêm {{table['user'].title}} mới
+    </button>
+    <br />
+    <br />
+    <div class="input-group mb-3">
+        <input type="text" class="form-control rounded-pill" placeholder="Tìm kiếm" aria-label="Tìm kiếm" aria-describedby="basic-addon1" />
+    </div>
+    <div>
+        <table class="table table-hover table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col" ng-repeat="x in table['user'].headers"><i class="fa fa-{{x.icon}}" style="font-size: 20px;"></i>&nbsp;&nbsp; {{x.title}}</th>
+                    <th scope="col"><i class="fa fa-cogs" style="font-size: 20px;"></i>&nbsp;&nbsp; Thao Tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in table['user'].rows">
+                    <th scope="row">{{ table['user'].rows.indexOf(x) + 1}}</th>
+                    <td ng-repeat="xx in table['user'].fields" ng-if="!xx.hidden">
+                        {{ x[xx.nameObj] }}
+                    </td>
+                    <td>
+                        <button
+                            ng-repeat="a in table['user'].action"
+                            type="button"
+                            class="btn btn-{{a.class}} rounded-pill"
+                            ng-click="mainCtrl.actionTableBtn(a.action, 'user', x, a.title, table['user'].title, a.actionTitle)"
+                        >
+                            <i class="fa fa-{{a.icon}}" style="font-size: 16px;"></i>&nbsp; {{a.title}}
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

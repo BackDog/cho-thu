@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+    <head>
+        <meta charset="utf-8" />
+        <base href="/" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>Chợ Thủ - Admin Page</title>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+        <link rel="stylesheet" href="../dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="../dist/css/bootstrap-utilities.css" />
+        <link rel="stylesheet" href="../dist/css/bootstrap-grid.css" />
+        <link rel="stylesheet" href="../dist/css/bootstrap-reboot.css" />
+
+        <script src="../dist/jquery-3.6.0.min.js"></script>
+        <script src="../dist/js/bootstrap.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    </head>
+
+    <body ng-controller="MainCtrl as mainCtrl">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <span class="navbar-brand mb-0 h1">Chợ Thủ</span>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item" ng-repeat="x in menu">
+                            <a class="nav-link" ng-class="x.active? 'active' : '' " aria-current="page" ng-click="mainCtrl.changeMenu(x)">
+                                <i class="fa fa-{{x.icon}}" style="font-size: 16px;"></i>
+                                {{x.name}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="main">
+            <div class="nav"></div>
+
+            <div class="container">
+                <div id="view">test</div>
+
+                <!-- Modal Town-->
+                <div class="modal fade" id="townModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Danh sách khu phố {{modalData.name}}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <button type="button" class="btn btn-primary rounded-pill" ng-click="mainCtrl.actionTableBtn('add', 'town', {id_guild: modalTown_Guild._id }, 'Thêm mới', 'Khu phố', 'Tạo')">
+                                    <i class="fa fa-plus" style="font-size: 16px;"></i>
+                                    Thêm {{table['town'].title}} mới
+                                </button>
+                                <br />
+                                <br />
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control rounded-pill" placeholder="Tìm kiếm" aria-label="Tìm kiếm" aria-describedby="basic-addon1" />
+                                </div>
+                                <div>
+                                    <table class="table table-hover table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" ng-repeat="x in table['town'].headers"><i class="fa fa-{{x.icon}}" style="font-size: 20px;"></i>&nbsp;&nbsp; {{x.title}}</th>
+                                                <th scope="col"><i class="fa fa-cogs" style="font-size: 20px;"></i>&nbsp;&nbsp; Thao Tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="x in table['town'].rows">
+                                                <th scope="row">{{ table['town'].rows.indexOf(x) + 1}}</th>
+                                                <td ng-repeat="xx in table['town'].fields">
+                                                    {{ x[xx.nameObj] }}
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        ng-repeat="a in table['town'].action"
+                                                        type="button"
+                                                        class="btn btn-{{a.class}} rounded-pill"
+                                                        ng-click="mainCtrl.actionTableBtn(a.action, 'town', x, a.title, table['town'].title, a.actionTitle)"
+                                                    >
+                                                        <i class="fa fa-{{a.icon}}" style="font-size: 16px;"></i>&nbsp; {{a.title}}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Create-->
+                <div class="modal fade" id="mainModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">{{modalType}} {{modalTitle}}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div ng-repeat="x in table[modalObjCode].fields">
+                                        <label class="form-label">{{x.title}}</label>
+                                        <input ng-if="x.element=='input'" type="{{x.type}}" class="form-control" ng-model="modalData[x.nameObj]" ng-value="modalCode=='add'?'':modalData[x.nameObj]" required />
+                                        <select ng-if="x.element=='select'" type="text" class="form-control" ng-model="modalData[x.nameObj]" ng-value="modalCode=='add'?'':modalData[x.nameObj]">
+                                            <option ng-repeat="z in mainCtrl.selectTypeFilter(x.data, '')" value="{{z.unit}}">{{z.name}} </option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Đóng</button>
+                                <button type="button" class="btn btn-primary rounded-pill" ng-click="mainCtrl.actionTable()">
+                                    {{modalActionTitle}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="row g-3">
+                    <div class="col-md-4">
+                        <label for="validationDefault01" class="form-label">Họ và tên</label>
+                        <input type="text" class="form-control" id="validationDefault01" value="Mark" required />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationDefault02" class="form-label">Địa chỉ giao hàng</label>
+                        <input type="text" class="form-control" id="validationDefault02" value="Otto" required />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationDefaultUsername" class="form-label">Số điện thoại</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="inputGroupPrepend2"> <i class="fa fa-phone-square" style="font-size: 24px;"></i>&nbsp;&nbsp; </span>
+                            <input type="text" class="form-control" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" required />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="validationDefault03" class="form-label">Phường</label>
+                        <select class="form-select" required>
+                            <option ng-repeat="z in table['guild'].rows" value="{{z._id}}">{{z.name}} </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="validationDefault04" class="form-label">Khu phố</label>
+                        <select class="form-select" id="validationDefault04" required>
+                            <option selected disabled value="">Choose...</option>
+                            <option>...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="validationDefault05" class="form-label">Mật khẩu</label>
+                        <input type="text" class="form-control" id="validationDefault05" required />
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required />
+                            <label class="form-check-label" for="invalidCheck2">
+                                Agree to terms and conditions
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary" type="submit">Đăng ký</button>
+                    </div>
+                </form>
+
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Default file input example</label>
+                    <input class="form-control" type="file" id="formFile" />
+                </div>
+            </div>
+        </div>
+        <script src="../admin/js/main.js"></script>
+    </body>
+</html>
