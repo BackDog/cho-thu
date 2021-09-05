@@ -9,7 +9,7 @@ const { Server }  = require('ws');
 // THÔNG TIN SERVER
 const URI_MONGODB = "mongodb+srv://admin:db11112222@rabbitcluster.jjait.mongodb.net/";
 const DB_NAME = 'cho-thu-db';
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 // KHỞI TẠO SERVER
 var app = express();
 app.use(express.static(__dirname + '/public'));

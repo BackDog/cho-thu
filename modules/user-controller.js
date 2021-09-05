@@ -53,9 +53,23 @@ var userController = {
             });
         });
 
+
         // CLIENT
         app.get('/user-guild', function (req, res) {
+            UTIL.findObj(dbo, "guild", {}, function(data) {
+                console.log(data);
+                res.end(JSON.stringify(data));
+            });
+        });
+
+        app.get('/user-town/:guild', function (req, res) {
             UTIL.findObj(dbo, "user", {}, function(data) {
+                res.end(JSON.stringify(data));
+            });
+        });
+
+        app.get('/user-product', function (req, res) {
+            UTIL.findObj(dbo, "product", {}, function(data) {
                 res.end(JSON.stringify(data));
             });
         });   

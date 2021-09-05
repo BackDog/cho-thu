@@ -32,7 +32,7 @@ const config = {
 		    	name: "Người dùng",
 		    	description: "Trang quản lý người dùng",
 		    	path: "user",
-		    	icon: "cube",
+		    	icon: "user",
 		    	active: false
 		    },
 		    {
@@ -45,11 +45,19 @@ const config = {
 		    },
 		    {
 		    	id: 5,
+		    	name: "Đơn vị",
+		    	description: "Trang quản lý đơn vị",
+		    	path: "unit",
+		    	icon: "cube",
+		    	active: false
+		    },
+		    {
+		    	id: 6,
 		    	name: "Báo cáo",
 		    	description: "Trang quản lý báo cáo",
 		    	path: "report",
 		    	icon: "clipboard",active: false
-		    },
+		    }
   		],
   		role: [
   			{
